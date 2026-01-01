@@ -74,9 +74,14 @@ export const useAuth = () => {
       } else {
         navigate(ROUTE_PATHS.HOME);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Login failed:", err);
-      const message = err.response?.data?.errorMessage || "아이디 또는 비밀번호가 일치하지 않습니다.";
+      const message =
+        typeof err === "object" && err !== null
+          ? ((err as { response?: { data?: { errorMessage?: unknown } } }).response?.data?.errorMessage as
+              | string
+              | undefined) || "아이디 또는 비밀번호가 일치하지 않습니다."
+          : "아이디 또는 비밀번호가 일치하지 않습니다.";
       setError(message);
 
       const newFailCount = failCount + 1;

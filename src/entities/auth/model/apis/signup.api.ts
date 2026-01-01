@@ -1,7 +1,7 @@
 import { type ApiResponse, client } from "@/shared";
 
 export interface SignupRequest {
-  username: string;
+  email: string;
   password: string;
   marketingAgreed: boolean;
 }
