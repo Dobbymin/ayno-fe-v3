@@ -16,7 +16,7 @@ const MainContainer = styled.div`
   }
 `;
 
-const MainPage = () => {
+export default function MainPage() {
   return (
     <>
       <HeroSection />
@@ -27,6 +27,4 @@ const MainPage = () => {
       </MainContainer>
     </>
   );
-};
-
-export default MainPage;
+}
