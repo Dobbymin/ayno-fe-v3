@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 
 import { type User, getMyProfile } from "@/entities";
 
-interface AuthContextType {
+type AuthContextType = {
   user: User | null;
   isLoggedIn: boolean;
   isAdmin: boolean;
@@ -10,7 +10,7 @@ interface AuthContextType {
   login: (user: User) => void;
   logout: () => void;
   checkAuth: () => Promise<void>;
-}
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
