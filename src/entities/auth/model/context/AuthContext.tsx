@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
-import { type User, getMyProfile } from "@/entities";
+import { type User, useGetMyProfile } from "@/entities";
 
 type AuthContextType = {
   user: User | null;
@@ -20,27 +20,19 @@ type Props = {
 
 export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const checkAuth = useCallback(async () => {
-    try {
-      const response = await getMyProfile({ suppressErrorToast: true });
-      if (response.data) {
-        setUser(response.data);
-      } else {
-        setUser(null);
-      }
-    } catch (error) {
-      console.error("Failed to check authentication:", error);
-      setUser(null);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const { data: profileData, isLoading: isProfileLoading, refetch } = useGetMyProfile();
 
   useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+    if (profileData?.data) {
+      setUser(profileData.data);
+    } else {
+      setUser(null);
+    }
+  }, [profileData]);
+
+  const checkAuth = useCallback(async () => {
+    await refetch();
+  }, [refetch]);
 
   const login = useCallback((userData: User) => {
     setUser(userData);
@@ -53,7 +45,15 @@ export const AuthProvider = ({ children }: Props) => {
 
   return (
     <AuthContext
-      value={{ user, isLoggedIn: !!user, isAdmin: user?.role === "ADMIN", isLoading, login, logout, checkAuth }}
+      value={{
+        user,
+        isLoggedIn: !!user,
+        isAdmin: user?.role === "ADMIN",
+        isLoading: isProfileLoading,
+        login,
+        logout,
+        checkAuth,
+      }}
     >
       {children}
     </AuthContext>
