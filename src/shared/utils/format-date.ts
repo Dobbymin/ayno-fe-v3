@@ -26,7 +26,7 @@ export const formatDate = (date: string | number | number[] | null | undefined):
     }
 
     return d.toLocaleDateString();
-  } catch (e) {
+  } catch {
     return "-";
   }
 };
