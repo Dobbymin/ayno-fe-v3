@@ -1,0 +1,34 @@
+import axios, { type AxiosError } from "axios";
+
+import { emitToast } from "./toast-bus";
+
+export const client = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// [응답 인터셉터] 글로벌 에러 핸들링 (방패막이)
+client.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    // 1. 401 Unauthorized: 토큰 만료 혹은 로그인 풀림
+    // if (error.response?.status === 401 && window.location.pathname !== '/login') {
+    //   // 강제로 로그인 페이지로 이동시킴 (새로고침 효과)
+    //   window.location.href = '/login';
+    // }
+
+    // 2. 403 Forbidden: 권한 없음
+    if (error.response?.status === 403) {
+      if (!error.config?.suppressErrorToast) {
+        const message =
+          (error.response.data as { errorMessage?: string } | undefined)?.errorMessage || "접근 권한이 없습니다.";
+        emitToast({ type: "error", message });
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);
