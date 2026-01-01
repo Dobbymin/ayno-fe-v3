@@ -26,6 +26,7 @@ export default defineConfig([
     rules: {
       "prettier/prettier": "warn",
       "react-refresh/only-export-components": "warn",
+      "unused-imports/no-unused-imports": "warn",
     },
   },
 ]);
