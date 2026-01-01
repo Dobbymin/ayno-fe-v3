@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import { Box, Flex, HStack, Heading, Text } from "@chakra-ui/react";
 
 import { useMainPage } from "../hooks";
 
@@ -6,59 +6,37 @@ export const HeaderSection = () => {
   const { sort, setSort } = useMainPage();
 
   return (
-    <SectionHeader>
-      <StyledSectionTitle>신규 플로우</StyledSectionTitle>
-      <SortContainer>
-        <SortButton active={sort === "likeCount,desc"} onClick={() => setSort("likeCount,desc")}>
+    <Flex as="header" mt="60px" mb="40px" justify="space-between" align="center">
+      <Heading as="h2" fontSize="24px" fontWeight="700" color="black">
+        신규 플로우
+      </Heading>
+      <HStack gap="10px">
+        <Box
+          as="button"
+          fontSize="16px"
+          color={sort === "likeCount,desc" ? "black" : "gray.400"}
+          fontWeight={sort === "likeCount,desc" ? "700" : "400"}
+          cursor="pointer"
+          _hover={{ color: "black" }}
+          onClick={() => setSort("likeCount,desc")}
+        >
           인기순
-        </SortButton>
-        <Separator>|</Separator>
-        <SortButton active={sort === "createdAt,desc"} onClick={() => setSort("createdAt,desc")}>
+        </Box>
+        <Text color="gray.200" fontSize="16px" mt="-2px">
+          |
+        </Text>
+        <Box
+          as="button"
+          fontSize="16px"
+          color={sort === "createdAt,desc" ? "black" : "gray.400"}
+          fontWeight={sort === "createdAt,desc" ? "700" : "400"}
+          cursor="pointer"
+          _hover={{ color: "black" }}
+          onClick={() => setSort("createdAt,desc")}
+        >
           최신순
-        </SortButton>
-      </SortContainer>
-    </SectionHeader>
+        </Box>
+      </HStack>
+    </Flex>
   );
 };
-
-const SectionHeader = styled.div`
-  margin-top: 60px;
-  margin-bottom: 40px; /* Increased spacing */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const StyledSectionTitle = styled.h2`
-  font-size: 24px;
-  font-weight: 700;
-  color: #000;
-`;
-
-const SortContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 16px;
-  color: #888;
-`;
-
-const SortButton = styled.button<{ active: boolean }>`
-  font-size: 16px;
-  color: ${({ active }) => (active ? "#000" : "#888")};
-  font-weight: ${({ active }) => (active ? "700" : "400")};
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-
-  &:hover {
-    color: #000;
-  }
-`;
-
-const Separator = styled.span`
-  color: #ddd;
-  font-size: 16px;
-  transform: translateY(-1px); /* Visual correction for vertical alignment */
-`;

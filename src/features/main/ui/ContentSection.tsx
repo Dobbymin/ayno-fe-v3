@@ -1,8 +1,6 @@
 import { useNavigate } from "react-router";
 
-import { Spinner } from "@chakra-ui/react";
-import { keyframes } from "@emotion/react";
-import styled from "@emotion/styled";
+import { Center, EmptyState, Flex, Grid, Spinner, Text, VStack } from "@chakra-ui/react";
 
 import { ROUTE_PATHS } from "@/shared";
 
@@ -15,18 +13,40 @@ export const ContentSection = () => {
   const { flows, loading, error, currentPage, searchKeyword, sort } = useMainPage();
 
   return (
-    <ContentWrapper>
+    <Flex direction="column" minH="600px">
       {loading ? (
-        <Spinner />
+        <Center py={20}>
+          <Spinner size="xl" />
+        </Center>
       ) : error ? (
-        <div>{error}</div>
+        <Center py={20}>
+          <Text color="red.500">{error}</Text>
+        </Center>
       ) : flows.length === 0 ? (
-        <EmptyStateContainer>
-          <EmptyStateMessage>아직 등록된 글이 없습니다.</EmptyStateMessage>
-          <p>첫 번째 글의 주인공이 되어보세요!</p>
-        </EmptyStateContainer>
+        <EmptyState.Root py={20}>
+          <EmptyState.Content>
+            <VStack gap={4} textAlign="center">
+              <EmptyState.Title fontSize="18px" fontWeight="500" color="gray.500">
+                아직 등록된 글이 없습니다.
+              </EmptyState.Title>
+              <EmptyState.Description color="gray.400">첫 번째 글의 주인공이 되어보세요!</EmptyState.Description>
+            </VStack>
+          </EmptyState.Content>
+        </EmptyState.Root>
       ) : (
-        <Grid key={`${sort}-${currentPage}-${searchKeyword}`}>
+        <Grid
+          key={`${sort}-${currentPage}-${searchKeyword}`}
+          templateColumns={{ base: "1fr", sm: "repeat(auto-fit, 430px)" }}
+          justifyContent={{ base: "center", sm: "start" }}
+          gap="40px"
+          animation="fadeIn 0.5s ease-out"
+          css={{
+            "@keyframes fadeIn": {
+              from: { opacity: 0, transform: "translateY(20px)" },
+              to: { opacity: 1, transform: "translateY(0)" },
+            },
+          }}
+        >
           {flows.map((flow) => (
             <FlowCard
               key={flow.artifactId}
@@ -41,51 +61,6 @@ export const ContentSection = () => {
           ))}
         </Grid>
       )}
-    </ContentWrapper>
+    </Flex>
   );
 };
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 430px);
-  justify-content: start; /* Align grid with title */
-  gap: 40px;
-  animation: ${fadeIn} 0.5s ease-out;
-
-  @media (max-width: 480px) {
-    grid-template-columns: 1fr;
-    justify-content: center;
-  }
-`;
-
-const ContentWrapper = styled.div`
-  min-height: 600px; /* Ensure content area doesn't collapse during loading */
-  display: flex;
-  flex-direction: column;
-`;
-const EmptyStateContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 400px;
-  width: 100%;
-  color: #888;
-  gap: 16px;
-`;
-
-const EmptyStateMessage = styled.p`
-  font-size: 18px;
-  font-weight: 500;
-`;

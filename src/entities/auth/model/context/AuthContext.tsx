@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 import { type User, useGetMyProfile } from "@/entities";
 
@@ -22,13 +22,12 @@ export const AuthProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User | null>(null);
   const { data: profileData, isLoading: isProfileLoading, refetch } = useGetMyProfile();
 
-  useEffect(() => {
-    if (profileData?.data) {
-      setUser(profileData.data);
-    } else {
-      setUser(null);
-    }
-  }, [profileData]);
+  // Sync user state with profileData when it changes
+  const [prevProfileData, setPrevProfileData] = useState(profileData);
+  if (profileData !== prevProfileData) {
+    setPrevProfileData(profileData);
+    setUser(profileData?.data ?? null);
+  }
 
   const checkAuth = useCallback(async () => {
     await refetch();
