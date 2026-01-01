@@ -1,3 +1,5 @@
+import { AuthProvider } from "@/entities";
+
 import { QueryProvider, ThemeProvider } from "./components";
 
 type Props = {
@@ -7,7 +9,9 @@ type Props = {
 export const ApplicationProviders = ({ children }: Props) => {
   return (
     <QueryProvider>
-      <ThemeProvider>{children}</ThemeProvider>
+      <ThemeProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </ThemeProvider>
     </QueryProvider>
   );
 };

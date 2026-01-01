@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }: Props) => {
         setUser(null);
       }
     } catch (error) {
+      console.error("Failed to check authentication:", error);
       setUser(null);
     } finally {
       setIsLoading(false);
