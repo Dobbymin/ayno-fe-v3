@@ -16,5 +16,5 @@ export const ROUTE_PATHS = {
 };
 
 export const DYNAMIC_ROUTE_PATHS = {
-  ARTIFACT_DETAIL: (id: string) => `/artifact/${id}`,
+  ARTIFACT_DETAIL: (id: number) => `/artifact/${id}`,
 };

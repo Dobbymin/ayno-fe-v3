@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 
 import { Center, EmptyState, Flex, Grid, Spinner, Text, VStack } from "@chakra-ui/react";
 
-import { ROUTE_PATHS } from "@/shared";
+import { DYNAMIC_ROUTE_PATHS } from "@/shared";
 
 import { FlowCard } from "../components";
 import { useMainPage } from "../hooks";
@@ -38,7 +38,7 @@ export const ContentSection = () => {
           key={`${sort}-${currentPage}-${searchKeyword}`}
           templateColumns={{ base: "1fr", sm: "repeat(auto-fit, 430px)" }}
           justifyContent={{ base: "center", sm: "start" }}
-          gap="40px"
+          gap={10}
           animation="fadeIn 0.5s ease-out"
           css={{
             "@keyframes fadeIn": {
@@ -56,7 +56,7 @@ export const ContentSection = () => {
               authorImage={flow.profileImageUrl}
               likes={flow.likeCount}
               views={flow.viewCount.toLocaleString()}
-              onClick={() => navigate(ROUTE_PATHS.ARTIFACT_DETAIL.replace(":id", flow.artifactId.toString()))}
+              onClick={() => navigate(DYNAMIC_ROUTE_PATHS.ARTIFACT_DETAIL(flow.artifactId))}
             />
           ))}
         </Grid>
